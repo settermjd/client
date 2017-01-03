@@ -27,7 +27,7 @@
 
 namespace OCC {
 
-class SelectiveSyncTreeView;
+class SelectiveSyncWidget;
 
 class ownCloudInfo;
 
@@ -126,7 +126,7 @@ public:
     virtual void cleanupPage() Q_DECL_OVERRIDE;
 
 private:
-    SelectiveSyncTreeView *_treeView;
+    SelectiveSyncWidget *_selectiveSync;
 
 };
 
