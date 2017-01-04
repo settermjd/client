@@ -172,7 +172,8 @@ void SelectiveSyncWidget::recursiveInsert(QTreeWidgetItem* parent, QStringList p
                         item->setCheckState(0, Qt::PartiallyChecked);
                     }
                 }
-                if (size >= 0 && quint64(size) >= _bigFolderSizeLimitBytes) {
+                if (item->checkState(0) != Qt::Unchecked
+                        && size >= 0 && quint64(size) >= _bigFolderSizeLimitBytes) {
                     _bigFolderNotice->show();
                     item->setCheckState(0, Qt::Unchecked);
                 }
