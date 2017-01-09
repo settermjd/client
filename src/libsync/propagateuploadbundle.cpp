@@ -37,14 +37,14 @@ void PropagateFiles::append(PropagateItemJob* subJob) {
 }
 
 void PropagateFiles::append(const SyncFileItemPtr &item) {
-    // In case of bundles, in here we should append BundledUpload jobs with new files to the .top() of _subJobs until reached chunking size
-    // Role of this class is also to control how much data is going into the container class
+    // In case of bundles, in here we should append BundledUpload jobs with new files to the .top() of _subJobs until chunking size is reached.
+    // The role of this class is also to control how much data is going into the container class.
     // In version 1.0 append just PUTs
 
     Q_ASSERT((item->_size <= _propagator->chunkSize() && item->_direction == SyncFileItem::Up));
     PropagateUploadFileV1* subJob = new PropagateUploadFileV1(_propagator, item);
     if (item->_size <= _propagator->smallFileSize()){
-        _propagator->_dbJobsCount++; // This item db operations take considerably longer then any other factors.
+        _propagator->_dbJobsCount++; // Db operations for this item take considerably longer then any other factors.
         _dbJobs.append(subJob);
     } else {
         _propagator->_standardJobsCount++; // This item is not a small upload file, so it is standard
@@ -56,14 +56,14 @@ bool PropagateFiles::scheduleNextJobRoutine(QVector<PropagatorJob *> &subJobs) {
     QMutableVectorIterator<PropagatorJob *> subJobsIterator(subJobs);
     while (subJobsIterator.hasNext()) {
         subJobsIterator.next();
-        // Get the state of the sub job pointed by call next()
+        // Get the state of the sub job pointed at by call next()
         if (subJobsIterator.value()->_state == Finished) {
-            // If this items is finish, remove it from the _subJobs list as it is not needed anymore
+            // If this items is finished, remove it from the _subJobs list as it is not needed anymore
             // Note that in this case remove() from QVector will just perform memmove of pointer array items.
             PropagatorJob * job = subJobsIterator.value();
             subJobsIterator.remove();
 
-            // In this case de dont delete job, but save it in _finishedSubJobs queue
+            // In this case de dont delete the job, but save it in the _finishedSubJobs queue
             // We might need this job in slotSubJobFinished
             // The PropagateFiles class will be destroyed in PropagateDirectory
             // when it will detect that we finished PropagateFiles
@@ -94,11 +94,11 @@ bool PropagateFiles::scheduleNextJob()
             return true;
         }
 
-        // At the begining of the Directory Job, update expected number of Jobs to be synced
+        // At the beginning of the Directory Job, update the expected number of Jobs to be synced
         _totalJobs = _standardJobs.count() + _dbJobs.count();
     }
 
-    // Check if there are standard jobs in whole sync waiting for sync or pending
+    // Check if there are standard jobs in the whole sync waiting for sync or pending
     if (_propagator->_standardJobsCount > 0){
         // Check if there are already some dbJobs running
         if(_propagator->_activeDBJobs > 0){
@@ -114,14 +114,14 @@ bool PropagateFiles::scheduleNextJob()
                 // This container does not contain any remaining dbJobs
                 if(_runningNow > 1){
                     // There are some jobs running in this container,
-                    // but for sure not dbJobs, search in different container for db jobs
+                    // but they are not dbJobs, so search in a different container for db jobs
                     return false;
                 }
                 return scheduleNextJobRoutine(_standardJobs);
             }
         }
     } else {
-        // There are no remaining or pending standard jobs in whole sync
+        // There are no remaining or pending standard jobs in the whole sync
         // This also means that _standardJobs is empty
         Q_ASSERT(!scheduleNextJobRoutine(_standardJobs));
 
