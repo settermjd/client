@@ -200,7 +200,12 @@ void SelectiveSyncWidget::recursiveInsert(QTreeWidgetItem* parent, QStringList p
                         item->setCheckState(0, Qt::PartiallyChecked);
                     }
                 }
-                if (item->checkState(0) != Qt::Unchecked
+
+                // We only need to check the size for top level folders since the parent folder is
+                // always bigger than the child, and if the parent folder was checked manually,
+                // it means all children should be selected
+                bool isTopLevelFolder = !parent->parent();
+                if (isTopLevelFolder && item->checkState(0) != Qt::Unchecked
                         && folderNeedsUserConfirmation(_bigFolderSizeLimitBytes, GetSize(size), remotePerm.data())) {
                     _bigFolderNotice->show();
                     item->setCheckState(0, Qt::Unchecked);
