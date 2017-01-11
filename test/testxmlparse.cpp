@@ -116,7 +116,7 @@ private slots:
         QCOMPARE(sizes.size(), 1 ); // Quota info in the XML
 
         QVERIFY(_items.contains("/oc/remote.php/webdav/sharefolder/quitte.pdf"));
-        QVERIFY(_items.contains("/oc/remote.php/webdav/sharefolder"));
+        QVERIFY(_items.contains("/oc/remote.php/webdav/sharefolder/"));
         QVERIFY(_items.size() == 2 );
 
         QVERIFY(_subdirs.contains("/oc/remote.php/webdav/sharefolder/"));
